@@ -1,0 +1,38 @@
+bazel build -c opt //tensorflow_serving/example2/object_detection:object_detection_model
+
+When running locally, the tensorflow/models/research/ and slim directories should be appended to PYTHONPATH. This can be done by running the following from tensorflow/models/research/:
+# From tensorflow/models/research/
+export PYTHONPATH=$PYTHONPATH:`pwd`:`pwd`/slim
+
+
+
+
+python object_detection/export_inference_graph.py \
+--pipeline_config_path=object_detection/samples/configs/ssd_inception_v2_coco.config \
+--trained_checkpoint_prefix=object_detection/ssd_inception_v2_coco_11_06_2017/model.ckpt \
+--output_directory /tmp/inception_v2_model/1 \
+--input_type=image_tensor
+
+
+
+python export_inference_graph \
+    --input_type image_tensor \
+    --pipeline_config_path samples/configs/ssd_inception_v2_coco.config \
+    --trained_checkpoint_prefix ssd_inception_v2_coco_11_06_2017/model.ckpt \
+    --output_directory /tmp/inception_v2_model/1
+
+
+
+$>bazel-bin/tensorflow_serving/model_servers/tensorflow_model_server --port=9000 --model_name=mnist --model_base_path=/tmp/mnist_model/
+
+
+
+bazel-bin/tensorflow_serving/model_servers/tensorflow_model_server --port=9000 --model_name=inception_v2 --model_base_path=/tmp/inception_v2_model/ --enable_batching=true
+
+
+
+
+bazel-bin/tensorflow_serving/model_servers/tensorflow_model_server --port=9000 --model_name=inception_v2 --model_base_path=/tmp/inception_v2_model/
+python object_detection/my_test.py --server=localhost:9000 --image=object_detection/test_images/image1.jpg
+
+
