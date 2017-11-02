@@ -43,7 +43,7 @@ python object_detection/my_client.py --server=localhost:9000 --image=object_dete
 ```
 ### 5. notes
 the directories "object_detection" and "slim" are from the tensorflow repository "tensorflow/models/research/".<br />
-the files "my_client.py", "my_export_inference_graph.py", and "my_exporter" are the original codes or modified codes.
+the files "my_client.py", "my_export_inference_graph.py", and "my_exporter.py" are the original codes or modified codes.
 
 
 
